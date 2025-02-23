@@ -74,6 +74,7 @@ def phone_detection():
     min_tracking_confidence=0.5)
     index = 0
     pool_xza = np.zeros(int(fps * 3))
+    current_premium = 500
 
     while True:
         ret, frame = capture.read()
@@ -98,6 +99,7 @@ def phone_detection():
                 index %= len(pool_xza)
                 mean_angle = np.mean(pool_xza)
                 if np.all(pool_xza != 0) and mean_angle < -0.55:
+                    current_premium += 2
                     cv2.putText(
                         frame, 
                         "LOOK UP " + str(mean_angle), 
@@ -118,19 +120,21 @@ def phone_detection():
 
         #If a phone is detected, the counter will increase
         if len(detections) > 0:
-            consecutive_detections += 1
+            current_premium += 2
+            consecutive_detections +=1
         else:
+            current_premium -= 1
             consecutive_detections = 0
 
         #Displaying the counter
-        counter_text = f"Consecutive Frames: {consecutive_detections}"
+        counter_text = f"Current Preimium: {current_premium}"
         cv2.putText(
             frame, 
             counter_text, 
             (50, 50),  # Position
             cv2.FONT_HERSHEY_SIMPLEX,  # Font
             1,  # Scale
-            (0, 255, 0) if consecutive_detections > 0 else (0, 0, 255),  # Color (green if detected, red if not)
+            (0, 255, 0),  # Color (green if detected, red if not)
             2  # Thickness
         )
 
