@@ -2,3 +2,4 @@
 .venv/
 train/images/
 valid/images/
+runs/
