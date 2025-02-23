@@ -1,7 +1,8 @@
 .DS_Store
+**/.DS_Store
+
 .idea/
 .venv/
 train/images/
 valid/images/
 runs/
-.DS_Store
